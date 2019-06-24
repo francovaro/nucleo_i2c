@@ -72,8 +72,8 @@ int8_t Mcp_setInit(void)
 	memset(&ioconConfig, 0, sizeof(t_iocon));
 	memset(&byteToSend, 0, sizeof(t_byte));
 
-	ioconConfig.iocon_bit.bank = 0;
-	ioconConfig.iocon_bit.seqp = 1u;
+	ioconConfig.iocon_bit.bank = 0u;
+	ioconConfig.iocon_bit.seqp = 0u;
 
 	toSend[0] = icon_a[ioconConfig.iocon_bit.bank];
 	toSend[1] = ioconConfig.ioco_byte;

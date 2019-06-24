@@ -54,13 +54,13 @@ const t_byte control_onoff[2u] = {
 		{.byte = 0xFF}
 	};
 
-static void _handleChaneData(e_LedMatrix_number newVal);
+static void _handleChaneData(e_LedMatrix_number* newVal);
 
 int main(void)
 {
 	static e_LedMatrix_number numberDisplayed = eLedMatrix_zero;
 	int8_t retVal = 0;
-	t_byte toWrite;
+	t_byte toWrite[2u] = {0, 0};
 	changeOutput = 0;
 
 	setSysTick (1000);	// ?
@@ -80,16 +80,24 @@ int main(void)
 	}
 	TIM2_Configuration();
 
-	toWrite.byte = 0;	// init output value
-	LedMatrix_writeNumber(eLedMatrix_max);
+	LedMatrix_writeNumber(eLedMatrix_zero);
 
 	while(1)
 	{
 		if (tim_set == 1)
 		{
-			Mcp_writeToOutputA(control_onoff[OFF]);	// TURN OFF
-			Mcp_writeToOutputB(LedMatrix_getColumn());
-			Mcp_writeToOutputA(LedMatrix_getValue());
+			toWrite[1] = LedMatrix_getColumn();
+			toWrite[0] = control_onoff[OFF]; //LedMatrix_getValue();
+			//Mcp_writeToOutput_both(toWrite);
+
+			//Mcp_writeToOutputA(control_onoff[OFF]);	// TURN OFF
+			//Mcp_writeToOutputB(toWrite[1]);
+
+			Mcp_writeToOutput_both(toWrite);
+
+			toWrite[0] = LedMatrix_getValue();
+			Mcp_writeToOutputA(toWrite[0]);
+
 			LedMatrix_advanceColumn();
 
 			tim_set = 0;
@@ -97,7 +105,7 @@ int main(void)
 
 		if (changeOutput == 1)
 		{
-			_handleChaneData(numberDisplayed);
+			_handleChaneData(&numberDisplayed);
 
 			GPIO_ToggleBits(GPIOA,GPIO_Pin_5);
 			changeOutput = 0;
@@ -124,8 +132,8 @@ void SysTick_Handler()
 
 }
 
-void _handleChaneData(e_LedMatrix_number newVal)
+void _handleChaneData(e_LedMatrix_number* newVal)
 {
-	newVal = ((uint8_t)newVal+1)%(uint8_t)eLedMatrix_max;
-	LedMatrix_writeNumber(newVal);
+	*newVal = ((uint8_t)(*newVal+1))%(uint8_t)eLedMatrix_max;
+	LedMatrix_writeNumber(*newVal);
 }

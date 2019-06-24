@@ -11,7 +11,7 @@
 
 #define TIMEOUT_I2C 0xff
 
-#define Timed(x) i2c_timeOut = 10; while (x && (i2c_timeOut)) \
+#define Timed(x) i2c_timeOut = 5; while (x && (i2c_timeOut)) \
 { if (i2c_timeOut == 0)	\
 { \
 	I2C_GenerateSTOP(yI2C, ENABLE); return 1;\
