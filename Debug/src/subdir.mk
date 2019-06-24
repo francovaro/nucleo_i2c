@@ -4,6 +4,7 @@
 
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS += \
+../src/adc.c \
 ../src/fv_i2c.c \
 ../src/led_matrix.c \
 ../src/main.c \
@@ -15,6 +16,7 @@ C_SRCS += \
 ../src/uart.c 
 
 OBJS += \
+./src/adc.o \
 ./src/fv_i2c.o \
 ./src/led_matrix.o \
 ./src/main.o \
@@ -26,6 +28,7 @@ OBJS += \
 ./src/uart.o 
 
 C_DEPS += \
+./src/adc.d \
 ./src/fv_i2c.d \
 ./src/led_matrix.d \
 ./src/main.d \

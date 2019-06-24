@@ -34,7 +34,28 @@ void TIM2_Configuration(void)
 	TIM_Cmd(TIM2, ENABLE);
 }
 
-// not working :(
+void TIM3_Configuration(void)
+{
+	TIM_TimeBaseInitTypeDef TIM_InitStruct;
+
+	RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM3, ENABLE);
+
+	TIM_TimeBaseStructInit(&TIM_InitStruct);
+	//84.000.000/100.000=840
+	TIM_InitStruct.TIM_Prescaler = ((SystemCoreClock/2) / 100000) - 1; //42.000.000/100.000=420
+																		//con prescaler 420 si ha clock: 84.000.000/420 = 200KHz
+	TIM_InitStruct.TIM_Period = (1000 - 1); //
+
+	TIM_InitStruct.TIM_ClockDivision = TIM_CKD_DIV1;
+	TIM_InitStruct.TIM_CounterMode = TIM_CounterMode_Up;
+    TIM_TimeBaseInit(TIM3, &TIM_InitStruct);
+
+    /* abilito il trigger esterno TIM3 TRGO  */
+	TIM_SelectOutputTrigger(TIM3, TIM_TRGOSource_Update);
+
+	TIM_Cmd(TIM3, ENABLE);
+}
+
 void TIM5_Configuration(void)
 {
 	TIM_TimeBaseInitTypeDef TIM_InitStruct;
@@ -49,7 +70,7 @@ void TIM5_Configuration(void)
 
 	TIM_InitStruct.TIM_ClockDivision = 0;
 	TIM_InitStruct.TIM_CounterMode = TIM_CounterMode_Up;
-    TIM_TimeBaseInit(TIM2, &TIM_InitStruct);
+    TIM_TimeBaseInit(TIM5, &TIM_InitStruct);
 
     /* abilito il trigger esterno TIM2 TRGO  */
 	//TIM_SelectOutputTrigger(TIM5, TIM_TRGOSource_Update);	// ????????

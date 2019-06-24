@@ -1,3 +1,4 @@
+"src/adc.o"
 "src/fv_i2c.o"
 "src/led_matrix.o"
 "src/main.o"

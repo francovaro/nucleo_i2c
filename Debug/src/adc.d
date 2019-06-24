@@ -1,4 +1,4 @@
-src/main.o: ../src/main.c \
+src/adc.o: ../src/adc.c \
  C:/work/workspace_stm/nucleo-f401re_stdperiph_lib/CMSIS/device/stm32f4xx.h \
  C:/work/workspace_stm/nucleo-f401re_stdperiph_lib/CMSIS/core/core_cm4.h \
  C:/work/workspace_stm/nucleo-f401re_stdperiph_lib/CMSIS/core/core_cmInstr.h \
@@ -25,16 +25,9 @@ src/main.o: ../src/main.c \
  C:/work/workspace_stm/nucleo-f401re_stdperiph_lib/StdPeriph_Driver/inc/stm32f4xx_usart.h \
  C:/work/workspace_stm/nucleo-f401re_stdperiph_lib/StdPeriph_Driver/inc/stm32f4xx_wwdg.h \
  C:/work/workspace_stm/nucleo-f401re_stdperiph_lib/StdPeriph_Driver/inc/misc.h \
- C:/work/workspace_stm/nucleo_i2c/inc/mcp23017.h \
- C:/work/workspace_stm/nucleo_i2c/inc/led_matrix.h \
- C:/work/workspace_stm/nucleo_i2c/inc/mcp23017.h \
- C:/work/workspace_stm/nucleo_i2c/inc/test.h \
- C:/work/workspace_stm/nucleo_i2c/inc/uart.h \
- C:/work/workspace_stm/nucleo-f401re_stdperiph_lib/StdPeriph_Driver/inc/stm32f4xx_usart.h \
- C:/work/workspace_stm/nucleo_i2c/inc/timer.h \
- C:/work/workspace_stm/nucleo-f401re_stdperiph_lib/StdPeriph_Driver/inc/stm32f4xx_tim.h \
  C:/work/workspace_stm/nucleo_i2c/inc/adc.h \
- C:/work/workspace_stm/nucleo-f401re_stdperiph_lib/StdPeriph_Driver/inc/stm32f4xx_adc.h
+ C:/work/workspace_stm/nucleo-f401re_stdperiph_lib/StdPeriph_Driver/inc/stm32f4xx_adc.h \
+ C:/work/workspace_stm/nucleo-f401re_stdperiph_lib/StdPeriph_Driver/inc/stm32f4xx_dma.h
 
 C:/work/workspace_stm/nucleo-f401re_stdperiph_lib/CMSIS/device/stm32f4xx.h:
 
@@ -88,22 +81,8 @@ C:/work/workspace_stm/nucleo-f401re_stdperiph_lib/StdPeriph_Driver/inc/stm32f4xx
 
 C:/work/workspace_stm/nucleo-f401re_stdperiph_lib/StdPeriph_Driver/inc/misc.h:
 
-C:/work/workspace_stm/nucleo_i2c/inc/mcp23017.h:
-
-C:/work/workspace_stm/nucleo_i2c/inc/led_matrix.h:
-
-C:/work/workspace_stm/nucleo_i2c/inc/mcp23017.h:
-
-C:/work/workspace_stm/nucleo_i2c/inc/test.h:
-
-C:/work/workspace_stm/nucleo_i2c/inc/uart.h:
-
-C:/work/workspace_stm/nucleo-f401re_stdperiph_lib/StdPeriph_Driver/inc/stm32f4xx_usart.h:
-
-C:/work/workspace_stm/nucleo_i2c/inc/timer.h:
-
-C:/work/workspace_stm/nucleo-f401re_stdperiph_lib/StdPeriph_Driver/inc/stm32f4xx_tim.h:
-
 C:/work/workspace_stm/nucleo_i2c/inc/adc.h:
 
 C:/work/workspace_stm/nucleo-f401re_stdperiph_lib/StdPeriph_Driver/inc/stm32f4xx_adc.h:
+
+C:/work/workspace_stm/nucleo-f401re_stdperiph_lib/StdPeriph_Driver/inc/stm32f4xx_dma.h:

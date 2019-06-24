@@ -39,6 +39,7 @@
 #include "test.h"
 #include "uart.h"
 #include "timer.h"
+#include "adc.h"
 
 #define ON  0
 #define OFF 1
@@ -58,17 +59,18 @@ static void _handleChaneData(e_LedMatrix_number* newVal);
 
 int main(void)
 {
+	uint8_t adc_val = 0;
 	static e_LedMatrix_number numberDisplayed = eLedMatrix_zero;
 	int8_t retVal = 0;
 	t_byte toWrite[2u] = {0, 0};
 	changeOutput = 0;
 
 	setSysTick (1000);	// ?
+
 	//RCC_PCLK2Config(RCC_HCLK_Div2);             // ?
-	//fv_Uart_Init(DISABLE);
-	//fv_Uart_SendData("start\n",6);
-	initLed();
-	retVal = Mcp_setInit();
+
+	initLed();	// Init GPIO for the LED on the board
+	retVal = Mcp_setInit();	// Init I2C1 and write first config
 	//
 	if (retVal == 0)
 	{
@@ -76,15 +78,18 @@ int main(void)
 	}
 	else
 	{
-		return -1;
+		return -1;	// if something went wrong, exit...
 	}
-	TIM2_Configuration();
+
+	TIM2_Configuration();		// Init of TIM2 as count timer+interrupt
+	TIM3_Configuration();
+	//ADC_fv_Init(eADC_DMA);		// init ADC1+DMA+DMA interrupt
 
 	LedMatrix_writeNumber(eLedMatrix_zero);
 
 	while(1)
 	{
-		if (tim_set == 1)
+		if (tim_set == 1)	// TIM2 event
 		{
 			toWrite[1] = LedMatrix_getColumn();
 			toWrite[0] = control_onoff[OFF]; //LedMatrix_getValue();
@@ -101,6 +106,17 @@ int main(void)
 			LedMatrix_advanceColumn();
 
 			tim_set = 0;
+		}
+
+		if (DMA_HT_event == SET)	// Half Transfer Occurred
+		{
+			DMA_HT_event = RESET;
+		}
+
+		if (DMA_FT_event == SET)	// Full Transfer Occurred
+		{
+			DMA_FT_event = RESET;
+			adc_val = ADC_fv_Return_Avg();
 		}
 
 		if (changeOutput == 1)
