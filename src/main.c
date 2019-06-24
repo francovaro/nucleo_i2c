@@ -26,6 +26,12 @@
  * -
  */
 
+/*
+ * 24/06
+ * I2c with DMA not a good idea for now.
+ * Try to write both A&B in one shot
+ */
+
 #include "stm32f4xx.h"
 #include "mcp23017.h"
 #include "led_matrix.h"
@@ -47,6 +53,8 @@ const t_byte control_onoff[2u] = {
 		{.byte = 0x00},
 		{.byte = 0xFF}
 	};
+
+static void _handleChaneData(e_LedMatrix_number newVal);
 
 int main(void)
 {
@@ -73,15 +81,12 @@ int main(void)
 	TIM2_Configuration();
 
 	toWrite.byte = 0;	// init output value
-
 	LedMatrix_writeNumber(eLedMatrix_max);
 
 	while(1)
 	{
 		if (tim_set == 1)
 		{
-			//toWrite.byte ^= 0xff;			// set to opposite
-
 			Mcp_writeToOutputA(control_onoff[OFF]);	// TURN OFF
 			Mcp_writeToOutputB(LedMatrix_getColumn());
 			Mcp_writeToOutputA(LedMatrix_getValue());
@@ -92,8 +97,8 @@ int main(void)
 
 		if (changeOutput == 1)
 		{
-			//numberDisplayed = ((uint8_t)numberDisplayed+1)%(uint8_t)eLedMatrix_max;
-			//LedMatrix_writeNumber(numberDisplayed);
+			_handleChaneData(numberDisplayed);
+
 			GPIO_ToggleBits(GPIOA,GPIO_Pin_5);
 			changeOutput = 0;
 		}
@@ -119,3 +124,8 @@ void SysTick_Handler()
 
 }
 
+void _handleChaneData(e_LedMatrix_number newVal)
+{
+	newVal = ((uint8_t)newVal+1)%(uint8_t)eLedMatrix_max;
+	LedMatrix_writeNumber(newVal);
+}
