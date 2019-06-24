@@ -42,8 +42,8 @@ void TIM3_Configuration(void)
 
 	TIM_TimeBaseStructInit(&TIM_InitStruct);
 	//84.000.000/100.000=840
-	TIM_InitStruct.TIM_Prescaler = ((SystemCoreClock/2) / 100000) - 1; //42.000.000/100.000=420
-																		//con prescaler 420 si ha clock: 84.000.000/420 = 200KHz
+	TIM_InitStruct.TIM_Prescaler = ((SystemCoreClock) / 100000) - 1; //84.000.000/100.000=840
+																		//con prescaler 420 si ha clock: 84.000.000/840 = 100KHz
 	TIM_InitStruct.TIM_Period = (1000 - 1); //
 
 	TIM_InitStruct.TIM_ClockDivision = TIM_CKD_DIV1;

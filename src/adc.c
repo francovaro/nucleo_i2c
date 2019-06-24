@@ -9,7 +9,7 @@
 #include "adc.h"
 #include "stm32f4xx_dma.h"
 
-#define ADC_BUFFER_SIZE	10
+#define ADC_BUFFER_SIZE	100
 __IO uint16_t sampleCount;
 __IO uint16_t writeIndex;
 __IO uint16_t buffer[ADC_BUFFER_SIZE];
@@ -213,7 +213,7 @@ uint16_t ADC_fv_Return_Avg()
 		sum += buffer[count];
 	}
 
-	return (((sum/sampleCount)*10)/255);
+	return ((((sum/ADC_BUFFER_SIZE))*9)/0xFFF) ;
 }
 
 uint16_t ADC_fv_Read(void)
