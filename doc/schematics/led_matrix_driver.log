@@ -1,0 +1,25 @@
+Circuit: * C:\Users\franc\Documents\LTspiceXVII\schematics\led_matrix_driver.asc
+
+Limiting rise time of source v3 to 0.01
+Limiting fall time of source v3 to 0.01
+Limiting rise time of source v2 to 0.005
+Limiting fall time of source v2 to 0.005
+Direct Newton iteration for .op point succeeded.
+
+Date: Sat May 18 16:19:34 2019
+Total elapsed time: 0.291 seconds.
+
+tnom = 27
+temp = 27
+method = modified trap
+totiter = 6494
+traniter = 6474
+tranpoints = 2722
+accept = 2262
+rejected = 460
+matrix size = 17
+fillins = 2
+solver = Normal
+Matrix Compiler1: off  [0.1]/0.2/0.2
+Matrix Compiler2: off  [0.2]/0.2/0.2
+
