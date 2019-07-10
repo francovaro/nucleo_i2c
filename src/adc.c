@@ -9,7 +9,7 @@
 #include "adc.h"
 #include "stm32f4xx_dma.h"
 
-#define ADC_BUFFER_SIZE	100
+#define ADC_BUFFER_SIZE	50
 __IO uint16_t sampleCount;
 __IO uint16_t writeIndex;
 __IO uint16_t buffer[ADC_BUFFER_SIZE];
@@ -149,7 +149,6 @@ void ADC_fv_Init(t_ADC_Type config)
 		{
 			/* Enable DMA request after last transfer (Single-ADC mode) */
 			ADC_DMARequestAfterLastTransferCmd(ADC1, ENABLE);
-
 			ADC_DMACmd(ADC1, ENABLE); /* Enable ADC1 DMA */
 		}
 		break;
