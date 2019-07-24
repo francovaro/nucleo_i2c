@@ -9,7 +9,7 @@
 #include "adc.h"
 #include "stm32f4xx_dma.h"
 
-#define ADC_BUFFER_SIZE	50
+#define ADC_BUFFER_SIZE	25
 __IO uint16_t sampleCount;
 __IO uint16_t writeIndex;
 __IO uint16_t buffer[ADC_BUFFER_SIZE];
@@ -84,7 +84,7 @@ void ADC_fv_Init(t_ADC_Type config)
 
 	/* Config PIN */
 	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOA, ENABLE);
-	GPIO_InitStructure.GPIO_Pin = ( GPIO_Pin_5 );
+	GPIO_InitStructure.GPIO_Pin = ( GPIO_Pin_4 );
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AN;
 	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL;
 	GPIO_Init(GPIOA , &GPIO_InitStructure);
@@ -98,11 +98,12 @@ void ADC_fv_Init(t_ADC_Type config)
 		 	 - APB"_CLK = 25 MHz
 	*/
 
-	RCC_APB2PeriphClockCmd(RCC_APB2Periph_ADC1, ENABLE);	// ADC1 is using APB2 =>
+	RCC_APB2PeriphClockCmd(RCC_APB2Periph_ADC1, ENABLE);	// ADC1 is using APB2 => 84 MHz
+
 	/* ADC Common Init */
 	ADC_CommonInitStructure.ADC_Mode = ADC_Mode_Independent ;					//0 ;
-	ADC_CommonInitStructure.ADC_Prescaler = ADC_Prescaler_Div2;
-	ADC_CommonInitStructure.ADC_DMAAccessMode = ADC_DMAAccessMode_Disabled;	/* for multi ADC !*/
+	ADC_CommonInitStructure.ADC_Prescaler = ADC_Prescaler_Div2;					// => APB2/2 -> 42 mhz ?
+	ADC_CommonInitStructure.ADC_DMAAccessMode = ADC_DMAAccessMode_Disabled;		/* for multi ADC !*/
 	ADC_CommonInitStructure.ADC_TwoSamplingDelay = ADC_TwoSamplingDelay_5Cycles;
 	ADC_CommonInit(&ADC_CommonInitStructure);
 
@@ -122,12 +123,18 @@ void ADC_fv_Init(t_ADC_Type config)
 	if ( config == eADC_POLLING)
 	{
 		ADC_InitStructure.ADC_ExternalTrigConvEdge = ADC_ExternalTrigConvEdge_None;
-		ADC_InitStructure.ADC_ExternalTrigConv = DISABLE; // sure ?
+		ADC_InitStructure.ADC_ExternalTrigConv = ADC_ExternalTrigConv_T1_CC1; 		// sure ?
 	}
-	else
+	else if (config == eADC_INTERRUPT)
 	{
 		ADC_InitStructure.ADC_ExternalTrigConvEdge = ADC_ExternalTrigConvEdge_Rising;
 		ADC_InitStructure.ADC_ExternalTrigConv = ADC_ExternalTrigConv_T3_TRGO; // sure ?
+	}
+
+	else
+	{
+		ADC_InitStructure.ADC_ExternalTrigConvEdge = ADC_ExternalTrigConvEdge_None;
+		ADC_InitStructure.ADC_ExternalTrigConv = ADC_ExternalTrigConv_T1_CC1; // sure ?
 	}
 
 	ADC_InitStructure.ADC_DataAlign = ADC_DataAlign_Right;
@@ -141,7 +148,7 @@ void ADC_fv_Init(t_ADC_Type config)
 	ADC_IT_OVR : Overrun interrupt enable
 	 */
 
-	ADC_RegularChannelConfig(ADC1, ADC_Channel_5, 1, ADC_SampleTime_15Cycles);
+	ADC_RegularChannelConfig(ADC1, ADC_Channel_4, 1, ADC_SampleTime_15Cycles);
 
 	switch(config)
 	{
@@ -169,6 +176,12 @@ void ADC_fv_Init(t_ADC_Type config)
 	/* Enable ADC1 */
 	gAdvNewVal = 0;
 	ADC_Cmd(ADC1, ENABLE);
+
+	if (config == eADC_DMA)
+	{
+		ADC_SoftwareStartConv(ADC1);
+	}
+
 
 }
 
@@ -212,7 +225,7 @@ uint16_t ADC_fv_Return_Avg()
 		sum += buffer[count];
 	}
 
-	return ((((sum/ADC_BUFFER_SIZE))*9)/0xFFF) ;
+	return (sum/ADC_BUFFER_SIZE);
 }
 
 uint16_t ADC_fv_Read(void)

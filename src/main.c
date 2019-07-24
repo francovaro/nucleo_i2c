@@ -57,16 +57,20 @@ const t_byte control_onoff[2u] = {
 
 static void _handleChaneData(e_LedMatrix_number* newVal, uint16_t);
 
+// sys clk 84 mhz
+// HCLK  84 mhz => AHB
+// PCLK1 42 mhz => APB1
+// PCLK2 84 mhz => APB2
 int main(void)
 {
 	uint16_t adc_val = 0;
 	static e_LedMatrix_number numberDisplayed = eLedMatrix_zero;
 	int8_t retVal = 0;
 	t_byte toWrite[2u] = {0, 0};
-	SystemCoreClockUpdate();
-	changeOutput = 0;
 
-	setSysTick (1000);	// ?
+
+	changeOutput = 0;
+	setSysTick (1000);	// every 1 ms
 
 	initLed();	// Init GPIO for the LED on the board
 	retVal = Mcp_setInit();	// Init I2C1 and write first config
@@ -122,7 +126,7 @@ int main(void)
 		{
 			_handleChaneData(&numberDisplayed, adc_val);
 
-			GPIO_ToggleBits(GPIOA,GPIO_Pin_5);
+			GPIO_ToggleBits(GPIOA, GPIO_Pin_5);
 			changeOutput = 0;
 		}
 	}
@@ -147,9 +151,13 @@ void SysTick_Handler()
 
 }
 
+/*
+ * not really ok as should be defined levels instead of doing this...
+ */
 void _handleChaneData(e_LedMatrix_number* newVal, uint16_t val)
 {
 	//*newVal = ((uint8_t)(*newVal+1))%(uint8_t)eLedMatrix_max;
+	val = (val *10)/0xFFF;
 	if ((val >=0) && (val <=9))
 	{
 		*newVal = (e_LedMatrix_number)val;
