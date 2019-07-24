@@ -63,11 +63,10 @@ int main(void)
 	static e_LedMatrix_number numberDisplayed = eLedMatrix_zero;
 	int8_t retVal = 0;
 	t_byte toWrite[2u] = {0, 0};
+	SystemCoreClockUpdate();
 	changeOutput = 0;
 
 	setSysTick (1000);	// ?
-
-	//RCC_PCLK2Config(RCC_HCLK_Div2);             // ?
 
 	initLed();	// Init GPIO for the LED on the board
 	retVal = Mcp_setInit();	// Init I2C1 and write first config

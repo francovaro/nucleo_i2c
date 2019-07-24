@@ -98,7 +98,7 @@ void ADC_fv_Init(t_ADC_Type config)
 		 	 - APB"_CLK = 25 MHz
 	*/
 
-	RCC_APB2PeriphClockCmd(RCC_APB2Periph_ADC1, ENABLE);
+	RCC_APB2PeriphClockCmd(RCC_APB2Periph_ADC1, ENABLE);	// ADC1 is using APB2 =>
 	/* ADC Common Init */
 	ADC_CommonInitStructure.ADC_Mode = ADC_Mode_Independent ;					//0 ;
 	ADC_CommonInitStructure.ADC_Prescaler = ADC_Prescaler_Div2;
